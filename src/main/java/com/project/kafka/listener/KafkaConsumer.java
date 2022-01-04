@@ -10,14 +10,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaConsumer {
-    @KafkaListener(topicPartitions = @TopicPartition(topic = "test",
-            partitionOffsets = {
-                    @PartitionOffset(partition = "0", initialOffset = "0"),
-                    @PartitionOffset(partition = "3", initialOffset = "0")}))
-    public void listenWithHeaders(
-            @Payload String message,
-            @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
-        System.out.println(
-                "Received Message: " + message + " from partition: " + partition);
+    @KafkaListener(topicPartitions = @TopicPartition(topic = "${spring.kafka.template.default-topic}",
+            partitionOffsets = {@PartitionOffset(partition = "0", initialOffset = "0")}))
+    public void listen(@Payload String message, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
+        System.out.println("Received Message: " + message + " from partition: " + partition);
     }
 }
